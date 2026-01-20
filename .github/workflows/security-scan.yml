@@ -1,0 +1,75 @@
+# Supply Chain Analyzer - GitHub Actions Workflow
+# This workflow runs security scans on your dependencies
+
+name: Supply Chain Security
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    # Run weekly security scan
+    - cron: '0 0 * * 0'
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: Install Supply Chain Analyzer
+        run: |
+          pip install supply-chain-analyzer
+          # Or install from source:
+          # pip install -e .
+      
+      - name: Run security scan
+        run: |
+          sca scan . --format json --output results.json
+        continue-on-error: true
+      
+      - name: Upload scan results
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-scan-results
+          path: results.json
+      
+      - name: Check for critical issues
+        run: |
+          python -c "
+          import json
+          with open('results.json') as f:
+              data = json.load(f)
+          critical = data['summary']['critical_vulnerabilities']
+          if critical > 0:
+              print(f'❌ Found {critical} critical vulnerabilities!')
+              exit(1)
+          print('✅ No critical vulnerabilities found')
+          "
+
+  license-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: Install Supply Chain Analyzer
+        run: pip install supply-chain-analyzer
+      
+      - name: Run license check
+        run: |
+          sca license . --allow MIT --allow Apache-2.0 --allow BSD-3-Clause

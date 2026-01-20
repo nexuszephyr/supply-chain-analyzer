@@ -1,0 +1,54 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Caching
+.cache/
+*.cache
+
+# ML models
+models/*.joblib
+
+# Jupyter
+.ipynb_checkpoints/
+notebooks/data/*.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local config
+.env
+*.local.yaml
+
+# Test projects (cloned for testing)
+fastapi-scan/
+flask-test/
+requests-test/
+*-test/
+
+# Generated reports
+*.html

@@ -1,0 +1,34 @@
+{
+  "feature_columns": [
+    "days_since_creation",
+    "version_count",
+    "has_homepage",
+    "has_repository",
+    "description_length",
+    "classifiers_count",
+    "is_very_new",
+    "is_established",
+    "is_few_versions",
+    "doc_score",
+    "credibility_score"
+  ],
+  "models": {
+    "risk_scorer": {
+      "type": "RandomForestClassifier",
+      "file": "risk_scorer.joblib",
+      "scaler_required": false
+    },
+    "typosquat_classifier": {
+      "type": "LogisticRegression",
+      "file": "typosquat_classifier.joblib",
+      "scaler_required": true
+    },
+    "anomaly_detector": {
+      "type": "IsolationForest",
+      "file": "anomaly_detector.joblib",
+      "scaler_required": false
+    }
+  },
+  "scaler_file": "scaler.joblib",
+  "version": "1.0.0"
+}
